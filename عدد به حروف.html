@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تبدیل عدد به حروف فارسی</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazir', 'Tahoma', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 24px;
+      padding: 50px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+      max-width: 800px;
+      width: 95%;
+      margin: 40px 0;
+    }
+    
+    .creator-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: bold;
+      margin: -30px auto 25px auto;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      animation: fadeInDown 0.6s ease;
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    h1 {
+      text-align: center;
+      margin: 0 0 30px 0;
+      font-size: 28px;
+    }
+    
+    .converter-section {
+      margin-bottom: 30px;
+    }
+    
+    .input-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: all 0.3s;
+      background: white;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .result {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      word-break: break-word;
+    }
+    
+    .divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #667eea, transparent);
+      margin: 30px 0;
+    }
+    
+    .error {
+      background: #ff5252;
+    }
+    
+    .guide-section {
+      margin-top: 40px;
+    }
+    
+    .guide-title {
+      text-align: center;
+      font-size: 26px;
+      margin-bottom: 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .guide-card {
+      background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    }
+    
+    .guide-card.highlight {
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe5ff 100%);
+    }
+    
+    .guide-icon {
+      font-size: 36px;
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .guide-content {
+      flex: 1;
+    }
+    
+    .guide-content h3 {
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      color: #333;
+    }
+    
+    .guide-content p {
+      margin: 0 0 15px 0;
+      line-height: 1.7;
+      color: #555;
+      font-size: 15px;
+    }
+    
+    .example {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      border-right: 4px solid #667eea;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+    
+    .example-input {
+      background: #e8eaff;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      color: #667eea;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .arrow {
+      color: #667eea;
+      font-weight: bold;
+      margin: 0 8px;
+    }
+    
+    .example-output {
+      background: #f0f2ff;
+      padding: 4px 12px;
+      border-radius: 6px;
+      color: #333;
+      font-weight: 600;
+    }
+    
+    .tips-list {
+      margin: 10px 0 0 0;
+      padding-right: 20px;
+      list-style: none;
+    }
+    
+    .tips-list li {
+      position: relative;
+      padding: 8px 0;
+      padding-right: 25px;
+      line-height: 1.6;
+      color: #555;
+      font-size: 14px;
+    }
+    
+    .tips-list li:before {
+      content: '✓';
+      position: absolute;
+      right: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .example-item {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s;
+    }
+    
+    .example-item:hover {
+      border-color: #667eea;
+      transform: scale(1.02);
+    }
+    
+    .ex-num {
+      font-size: 20px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 8px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .ex-text {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+      }
+      
+      .guide-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      
+      .examples-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .guide-title {
+        font-size: 22px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <main class="container">
+   <div class="creator-badge">
+    ساخته شده توسط محمد مهدی اسحقی
+   </div>
+   <h1 id="app-title">تبدیل عدد به حروف فارسی</h1>
+   <div class="converter-section">
+    <div class="input-group"><label for="number-input" id="number-label">عدد (0 تا 999,999,999,999):</label> <input type="text" id="number-input" placeholder="مثلاً: 12345" inputmode="numeric">
+    </div>
+    <div class="result" id="number-result">
+     نتیجه اینجا نمایش داده می‌شود
+    </div>
+   </div>
+   <div class="divider"></div>
+   <div class="converter-section">
+    <div class="input-group"><label for="text-input" id="text-label">حروف (مثلاً: صد و بیست و سه):</label> <input type="text" id="text-input" placeholder="مثلاً: یکصد و بیست و سه">
+    </div>
+    <div class="result" id="text-result">
+     نتیجه اینجا نمایش داده می‌شود
+    </div>
+   </div>
+   <div class="divider"></div>
+   <div class="guide-section">
+    <h2 class="guide-title">📚 راهنمای استفاده</h2>
+    <div class="guide-card">
+     <div class="guide-icon">
+      🔢
+     </div>
+     <div class="guide-content">
+      <h3>تبدیل عدد به حروف</h3>
+      <p>در قسمت اول، عدد مورد نظر خود را وارد کنید. برنامه به صورت خودکار آن را به حروف فارسی تبدیل می‌کند.</p>
+      <div class="example"><strong>مثال:</strong> <span class="example-input">12345</span> <span class="arrow">←</span> <span class="example-output">دوازده هزار و سیصد و چهل و پنج</span>
+      </div>
+     </div>
+    </div>
+    <div class="guide-card">
+     <div class="guide-icon">
+      ✍️
+     </div>
+     <div class="guide-content">
+      <h3>تبدیل حروف به عدد</h3>
+      <p>در قسمت دوم، عدد را به حروف فارسی بنویسید. برنامه آن را به عدد تبدیل می‌کند.</p>
+      <div class="example"><strong>مثال:</strong> <span class="example-input">صد و بیست و سه</span> <span class="arrow">←</span> <span class="example-output">123</span>
+      </div>
+     </div>
+    </div>
+    <div class="guide-card">
+     <div class="guide-icon">
+      ⚡
+     </div>
+     <div class="guide-content">
+      <h3>نکات مهم</h3>
+      <ul class="tips-list">
+       <li>محدوده اعداد: <strong>0</strong> تا <strong>999,999,999,999</strong> (999 میلیارد)</li>
+       <li>اعداد منفی نیز پشتیبانی می‌شوند</li>
+       <li>نتایج به صورت لحظه‌ای نمایش داده می‌شوند</li>
+       <li>در نوشتن حروف از کلمه "و" برای جدا کردن استفاده کنید</li>
+      </ul>
+     </div>
+    </div>
+    <div class="guide-card highlight">
+     <div class="guide-icon">
+      💡
+     </div>
+     <div class="guide-content">
+      <h3>نمونه‌های بیشتر</h3>
+      <div class="examples-grid">
+       <div class="example-item">
+        <div class="ex-num">
+         0
+        </div>
+        <div class="ex-text">
+         صفر
+        </div>
+       </div>
+       <div class="example-item">
+        <div class="ex-num">
+         1000
+        </div>
+        <div class="ex-text">
+         یک هزار
+        </div>
+       </div>
+       <div class="example-item">
+        <div class="ex-num">
+         1000000
+        </div>
+        <div class="ex-text">
+         یک میلیون
+        </div>
+       </div>
+       <div class="example-item">
+        <div class="ex-num">
+         999999999
+        </div>
+        <div class="ex-text">
+         نهصد و نود و نه میلیون و نهصد و نود و نه هزار و نهصد و نود و نه
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </main>
+  <script>
+    const ones = ['', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', '��شت', 'نه'];
+    const tens = ['', '', 'بیست', 'سی', 'چهل', 'پنجاه', 'شصت', 'هفتاد', 'هشتاد', 'نود'];
+    const hundreds = ['', 'یکصد', 'دویست', 'سیصد', 'چهارصد', 'پانصد', 'ششصد', 'هفتصد', 'هشتصد', 'نهصد'];
+    const teens = ['ده', 'یازده', 'دوازده', 'سیزده', 'چهارده', 'پانزده', 'شانزده', 'هفده', 'هجده', 'نوزده'];
+    
+    const scales = ['', 'هزار', 'میلیون', 'میلیارد'];
+    
+    function convertThreeDigits(num) {
+      if (num === 0) return '';
+      
+      const h = Math.floor(num / 100);
+      const t = Math.floor((num % 100) / 10);
+      const o = num % 10;
+      
+      let result = [];
+      
+      if (h > 0) result.push(hundreds[h]);
+      
+      if (t === 1) {
+        result.push(teens[o]);
+      } else {
+        if (t > 0) result.push(tens[t]);
+        if (o > 0) result.push(ones[o]);
+      }
+      
+      return result.join(' و ');
+    }
+    
+    function numberToText(num) {
+      if (num === 0) return 'صفر';
+      if (num < 0) return 'منفی ' + numberToText(-num);
+      if (num > 999999999999) return 'عدد خارج از محدوده';
+      
+      const groups = [];
+      let temp = num;
+      
+      while (temp > 0) {
+        groups.push(temp % 1000);
+        temp = Math.floor(temp / 1000);
+      }
+      
+      const parts = [];
+      for (let i = groups.length - 1; i >= 0; i--) {
+        if (groups[i] > 0) {
+          const text = convertThreeDigits(groups[i]);
+          if (i > 0) {
+            parts.push(text + ' ' + scales[i]);
+          } else {
+            parts.push(text);
+          }
+        }
+      }
+      
+      return parts.join(' و ');
+    }
+    
+    function textToNumber(text) {
+      text = text.trim().replace(/\s+/g, ' ');
+      
+      if (text === 'صفر') return 0;
+      
+      text = text.replace(/یکصد/g, '100')
+               .replace(/دویست/g, '200')
+               .replace(/سیصد/g, '300')
+               .replace(/چهارصد/g, '400')
+               .replace(/پانصد/g, '500')
+               .replace(/ششصد/g, '600')
+               .replace(/هفتصد/g, '700')
+               .replace(/هشتصد/g, '800')
+               .replace(/نهصد/g, '900');
+      
+      const numberMap = {
+        'یک': 1, 'دو': 2, 'سه': 3, 'چهار': 4, 'پنج': 5,
+        'شش': 6, 'هفت': 7, 'هشت': 8, 'نه': 9,
+        'ده': 10, 'یازده': 11, 'دوازده': 12, 'سیزده': 13, 'چهارده': 14,
+        'پانزده': 15, 'شانزده': 16, 'هفده': 17, 'هجده': 18, 'نوزده': 19,
+        'بیست': 20, 'سی': 30, 'چهل': 40, 'پنجاه': 50,
+        'شصت': 60, 'هفتاد': 70, 'هشتاد': 80, 'نود': 90,
+        'هزار': 1000, 'میلیون': 1000000, 'میلیارد': 1000000000
+      };
+      
+      const parts = text.split('و').map(p => p.trim());
+      let total = 0;
+      let current = 0;
+      
+      for (const part of parts) {
+        const tokens = part.split(' ').filter(t => t);
+        
+        for (const token of tokens) {
+          const cleanToken = token.trim();
+          
+          if (/^\d+$/.test(cleanToken)) {
+            current += parseInt(cleanToken);
+          } else if (numberMap[cleanToken]) {
+            const value = numberMap[cleanToken];
+            
+            if (value >= 1000) {
+              current = current === 0 ? 1 : current;
+              total += current * value;
+              current = 0;
+            } else {
+              current += value;
+            }
+          }
+        }
+      }
+      
+      return total + current;
+    }
+    
+    const defaultConfig = {
+      app_title: 'تبدیل عدد به حروف فا��سی',
+      number_label: 'عدد (0 تا 999,999,999,999):',
+      text_label: 'حروف (مثلاً: صد و بیست و سه):',
+      primary_color: '#667eea',
+      secondary_color: '#764ba2',
+      text_color: '#333333',
+      background_color: '#ffffff',
+      accent_color: '#ff5252'
+    };
+    
+    async function onConfigChange(config) {
+      const appTitle = config.app_title || defaultConfig.app_title;
+      const numberLabel = config.number_label || defaultConfig.number_label;
+      const textLabel = config.text_label || defaultConfig.text_label;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+      
+      document.getElementById('app-title').textContent = appTitle;
+      document.getElementById('app-title').style.color = textColor;
+      
+      document.getElementById('number-label').textContent = numberLabel;
+      document.getElementById('number-label').style.color = textColor;
+      
+      document.getElementById('text-label').textContent = textLabel;
+      document.getElementById('text-label').style.color = textColor;
+      
+      document.querySelector('.container').style.background = backgroundColor;
+      
+      document.body.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+      
+      const results = document.querySelectorAll('.result');
+      results.forEach(result => {
+        if (!result.classList.contains('error')) {
+          result.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+        }
+      });
+      
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.style.background = backgroundColor;
+        input.style.color = textColor;
+      });
+      
+      document.querySelector('.divider').style.background = `linear-gradient(90deg, transparent, ${primaryColor}, transparent)`;
+    }
+    
+    const numberInput = document.getElementById('number-input');
+    const textInput = document.getElementById('text-input');
+    const numberResult = document.getElementById('number-result');
+    const textResult = document.getElementById('text-result');
+    
+    numberInput.addEventListener('input', (e) => {
+      const value = e.target.value.replace(/[^0-9-]/g, '');
+      
+      if (value === '' || value === '-') {
+        numberResult.textContent = 'نتیجه اینجا نمایش داده می‌شود';
+        numberResult.classList.remove('error');
+        return;
+      }
+      
+      const num = parseInt(value);
+      
+      if (isNaN(num)) {
+        numberResult.textContent = '❌ لطفاً یک عدد معتبر وارد کنید';
+        numberResult.classList.add('error');
+        return;
+      }
+      
+      if (num > 999999999999 || num < -999999999999) {
+        numberResult.textContent = '❌ عدد خارج از محدوده (حداکثر: 999,999,999,999)';
+        numberResult.classList.add('error');
+        return;
+      }
+      
+      numberResult.classList.remove('error');
+      numberResult.textContent = numberToText(num);
+    });
+    
+    textInput.addEventListener('input', (e) => {
+      const value = e.target.value.trim();
+      
+      if (value === '') {
+        textResult.textContent = 'نتیجه اینجا نمایش داده می‌شود';
+        textResult.classList.remove('error');
+        return;
+      }
+      
+      try {
+        const num = textToNumber(value);
+        
+        if (isNaN(num)) {
+          textResult.textContent = '❌ متن قابل تبدیل نی��ت';
+          textResult.classList.add('error');
+          return;
+        }
+        
+        textResult.classList.remove('error');
+        textResult.textContent = num.toLocaleString('fa-IR');
+      } catch (error) {
+        textResult.textContent = '❌ خطا در تبدیل متن';
+        textResult.classList.add('error');
+      }
+    });
+    
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['app_title', config.app_title || defaultConfig.app_title],
+          ['number_label', config.number_label || defaultConfig.number_label],
+          ['text_label', config.text_label || defaultConfig.text_label]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a8a0e7b2420b660',t:'MTc2NDgzODIzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
